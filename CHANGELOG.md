@@ -204,6 +204,7 @@ Docs: https://docs.openclaw.ai
 - CLI/status: keep lean `openclaw status --json` off manifest-backed channel discovery so configured-channel checks do not repeatedly rescan plugin metadata. Fixes #79129.
 - Control UI/chat: hide retired and non-public Google Gemini model IDs from chat model catalogs and route the bare `gemini-3-pro` alias to Gemini 3.1 Pro Preview instead of the shut-down Gemini 3 Pro Preview. Thanks @BunsDev.
 - CLI/infer: canonicalize case-only catalog model refs in `infer model run --model` so mixed-case provider/model strings resolve to the canonical catalog entry instead of failing with `Unknown model`. (#78940) Thanks @ai-hpc.
+- CLI/infer: allow explicit local `infer model run --model <provider/model>` probes to use exact bundled static catalog rows before the provider is written to config, surfacing missing credentials as auth errors instead of `Unknown model`.
 - CLI/install: refuse state-mutating OpenClaw CLI runs as root by default, keep an explicit `OPENCLAW_ALLOW_ROOT=1` escape hatch for intentional root/container use, and update DigitalOcean setup guidance to run OpenClaw as a non-root user. Fixes #67478. Thanks @Jerry-Xin and @natechicago.
 - Auto-reply/media: resolve `scp` from `PATH` when staging sandbox media so nonstandard OpenSSH installs can copy remote attachments.
 - Agents/PI: route PI-native OpenAI-compatible default streams through OpenClaw boundary-aware transports so local-compatible model runs keep API-key injection and transport policy.
@@ -553,6 +554,7 @@ Docs: https://docs.openclaw.ai
 
 ### Fixes
 
+- macOS/launchd: set generated Gateway LaunchAgent plists to `ProcessType=Interactive` so the gateway keeps timely execution during idle periods. Fixes #58061; refs #62294 and closed duplicate #66992. (#62308) Thanks @bryanpearson and @zssggle-rgb.
 - Plugins/install: honor the beta update channel for onboarding and doctor-managed plugin installs by requesting floating npm and ClawHub specs with `@beta` while keeping persistent install records on the catalog default. Thanks @vincentkoc.
 - WhatsApp/onboarding: canonicalize setup and pairing allowlist entries to WhatsApp's digit-only phone ids while still accepting E.164, JID, and `whatsapp:` inputs, so personal-phone allowlists match WhatsApp Web sender ids after setup. Thanks @vincentkoc.
 - Gateway/startup: load provider plugins that own explicitly configured image, video, or music generation defaults so generation tools become live after gateway restart instead of remaining catalog-only. Fixes #77244. Thanks @buyuangtampan, @Nikoxx99, and @vincentkoc.
